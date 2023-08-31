@@ -8,15 +8,35 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var numbers = [Int]()
+    @State private var currentNumber = 1
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationView {
+            VStack {
+                List {
+                    ForEach(numbers, id: \.self) {
+                        Text("Row \($0)")
+                    }
+                    .onDelete(perform: removeRows)
+                }
+                Button("Add Number") {
+                    withAnimation {
+                        numbers.append(currentNumber)
+                    }
+                    currentNumber += 1
+                }
+            }
+            .navigationTitle("onDelete")
+            .toolbar {
+                EditButton()
+            }
         }
-        .padding()
     }
+    
+    func removeRows(at offsets: IndexSet) {
+            numbers.remove(atOffsets: offsets)
+        }
 }
 
 struct ContentView_Previews: PreviewProvider {
